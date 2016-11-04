@@ -49,7 +49,43 @@ public class DfaSimplify {
 			}
 		}
 	}
+	
+	DfaSimplify(ArrayList<String> inputStrings,String fina,String unfina) {
+		nonFinalSet = new HashSet<String>();
+		finalSet = new HashSet<String>();
+		edges = new ArrayList<Edge>();
+		changes = new ArrayList<String>();
+		allSets = new HashSet<HashSet<String>>();
 
+		System.out.println("输入非终态(逗号隔开)：");
+		for (String str : unfina.split(",")) {
+			nonFinalSet.add(str);
+		}
+
+		System.out.println("输入终态(逗号隔开)：");
+		for (String str : fina.split(",")) {
+			finalSet.add(str);
+		}
+
+		System.out.println("输入DFA(node~change~final,输入回车结束)：");
+
+		for(int i=0;i<inputStrings.size();i++) {
+			String[] strs = inputStrings.get(i).split("~");// 输入
+			if (strs[0] == "-1" || strs.length < 3)// 防止错误
+				return;
+			String node = strs[0], change = strs[1], arrive = strs[2];// 分离出来的全部原始信息
+			for (String t : change.split(","))
+				Nfa2Dfa.insertOrContains(changes, t);// 增加中间信息
+			/* 增加边信息 */
+			for (String nodeTemp : node.split(",")) {
+				for (String changeTemp : change.split(",")) {
+					for (String arriveTemp : arrive.split(","))
+						Nfa2Dfa.insertOrContains(edges, new Edge(nodeTemp,
+								changeTemp, arriveTemp));
+				}
+			}
+		}
+	}
 	/**
 	 * 输入非终态字符串组，终态字符串组，所有Edge类型边的信息
 	 * 

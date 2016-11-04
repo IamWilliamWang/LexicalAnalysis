@@ -34,6 +34,33 @@ public class Nfa2Dfa {
 		}
 	}
 
+	public Nfa2Dfa(ArrayList<String> inputStrings) {
+		// TODO Auto-generated constructor stub
+		// 构造函数输入边的属性
+		changes = new ArrayList<String>();
+		edges = new ArrayList<Edge>();
+		EdgesWithSet = new ArrayList<Edge_Set>();
+		dfaSets = new ArrayList<HashSet<String>>();
+		
+		for(int i=0;i<inputStrings.size();i++) {
+			String[] strs = inputStrings.get(i).split("~");// 输入
+			if (strs[0] == "-1" || strs.length < 3)// 防止错误
+				return;
+			String node = strs[0], change = strs[1], arrive = strs[2];// 分离出来的全部原始信息
+			for (String t : change.split(","))
+				insertOrContains(changes, t);// 增加中间信息
+			changes.remove("eps");// 去掉epsilon
+			/* 增加边信息 */
+			for (String nodeTemp : node.split(",")) {
+				for (String changeTemp : change.split(",")) {
+					for (String arriveTemp : arrive.split(","))
+						insertOrContains(edges, new Edge(nodeTemp, changeTemp,
+								arriveTemp));
+				}
+			}
+		}
+	}
+	
 	public static <T> boolean insertOrContains(Collection<T> collection,
 			T element) {
 		if (collection.contains(element)) {

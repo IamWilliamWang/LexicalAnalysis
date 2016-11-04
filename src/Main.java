@@ -5,16 +5,16 @@ import java.util.Scanner;
 
 public class Main {
 
-	private final static String nonNamesKey = "nonNames";
-	private final static String finalNamesKey = "finalNames";
+	final static String nonNamesKey = "nonNames";
+	final static String finalNamesKey = "finalNames";
 
 	private enum State {
 		终态, 非终态
 	};
 
 	private static String[] FinalStates;
-	private static HashMap<String, HashSet<String>> name2SetMap;
-	private static ArrayList<Edge> newEdges = new ArrayList<Edge>();
+	static HashMap<String, HashSet<String>> name2SetMap;
+	static ArrayList<Edge> newEdges = new ArrayList<Edge>();
 	private static HashSet<String> nonFinalSet = new HashSet<String>();
 	private static HashSet<String> finalSet = new HashSet<String>();
 
@@ -23,6 +23,10 @@ public class Main {
 		FinalStates = new Scanner(System.in).nextLine().split(",");
 	}
 
+	static void getNonFinalStateAndFinalState(String fina) {
+		FinalStates = fina.split(",");
+	}
+	
 	private static boolean contains(String[] strs, String str) {
 		boolean have = false;
 		for (String s : strs) {
@@ -32,7 +36,7 @@ public class Main {
 		return have;
 	}
 
-	private static HashMap<String, String[]> renameAllSets(
+	static HashMap<String, String[]> renameAllSets(
 			ArrayList<HashSet<String>> dfaSets,
 			ArrayList<Edge_Set> oldEdgesWithSet) {
 		/* 把终态与非终态分成两个集合 */
@@ -112,6 +116,13 @@ public class Main {
 		}
 	}
 
+	static void clearAll() {
+		name2SetMap.clear();
+		newEdges.clear();
+		nonFinalSet.clear();
+		finalSet.clear();
+	}
+	
 	public static void main(String[] args) {
 		/* NFA到DFA */
 		getNonFinalStateAndFinalState();
